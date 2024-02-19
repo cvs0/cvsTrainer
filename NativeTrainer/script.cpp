@@ -52,14 +52,16 @@ class MenuItemPlayerFix : public MenuItemDefault
 			ENTITY::SET_ENTITY_HEALTH(horse, ENTITY::GET_ENTITY_MAX_HEALTH(horse, FALSE), FALSE);
 			PED::SET_PED_STAMINA(horse, 100.0);
 			SetStatusText("player and horse fixed");
-		} else
-		if (PED::IS_PED_IN_ANY_VEHICLE(playerPed, FALSE))
-		{
-			Vehicle veh = PED::GET_VEHICLE_PED_IS_USING(playerPed);
-			ENTITY::SET_ENTITY_HEALTH(veh, ENTITY::GET_ENTITY_MAX_HEALTH(veh, FALSE), FALSE);
-			SetStatusText("player and vehicle fixed");
-		} else
-			SetStatusText("player fixed");
+		}
+		else
+			if (PED::IS_PED_IN_ANY_VEHICLE(playerPed, FALSE))
+			{
+				Vehicle veh = PED::GET_VEHICLE_PED_IS_USING(playerPed);
+				ENTITY::SET_ENTITY_HEALTH(veh, ENTITY::GET_ENTITY_MAX_HEALTH(veh, FALSE), FALSE);
+				SetStatusText("player and vehicle fixed");
+			}
+			else
+				SetStatusText("player fixed");
 	}
 public:
 	MenuItemPlayerFix(string caption)
@@ -68,7 +70,6 @@ public:
 
 class MenuItemHorseRagdoll : public MenuItemDefault
 {
-
 	int m_time_min;
 	int m_time_max;
 	bool m_stop_injured;
@@ -84,10 +85,10 @@ class MenuItemHorseRagdoll : public MenuItemDefault
 public:
 	MenuItemHorseRagdoll(string caption, int time_min, int time_max, bool stopOnInjury, bool stopOnDeath)
 		: MenuItemDefault(caption),
-			m_time_min(time_min),
-			m_time_max(time_max),
-			m_stop_injured(stopOnInjury),
-			m_stop_dead(stopOnDeath) {}
+		m_time_min(time_min),
+		m_time_max(time_max),
+		m_stop_injured(stopOnInjury),
+		m_stop_dead(stopOnDeath) {}
 };
 
 class MenuItemVehicleBoost : public MenuItemSwitchable
@@ -131,9 +132,10 @@ class MenuItemVehicleBoost : public MenuItemSwitchable
 			if (speed < 3.0f) speed = 3.0f;
 			speed += speed * 0.03f;
 			VEHICLE::SET_VEHICLE_FORWARD_SPEED(veh, speed);
-		} else
-		if (ENTITY::IS_ENTITY_IN_AIR(veh, 0) || speed > 5.0)
-			VEHICLE::SET_VEHICLE_FORWARD_SPEED(veh, 0.0);
+		}
+		else
+			if (ENTITY::IS_ENTITY_IN_AIR(veh, 0) || speed > 5.0)
+				VEHICLE::SET_VEHICLE_FORWARD_SPEED(veh, 0.0);
 	}
 public:
 	MenuItemVehicleBoost(string caption)
@@ -143,11 +145,11 @@ public:
 class MenuItemPlayerAddCash : public MenuItemDefault
 {
 	int m_value;
-	virtual void OnSelect()	{ CASH::PLAYER_ADD_CASH(m_value, 0x2cd419dc); }
+	virtual void OnSelect() { CASH::PLAYER_ADD_CASH(m_value, 0x2cd419dc); }
 public:
 	MenuItemPlayerAddCash(string caption, int value)
 		: MenuItemDefault(caption),
-			m_value(value) {}
+		m_value(value) {}
 };
 
 class MenuItemPlayerRagdoll : public MenuItemDefault
@@ -161,10 +163,10 @@ class MenuItemPlayerRagdoll : public MenuItemDefault
 public:
 	MenuItemPlayerRagdoll(string caption, int time_min, int time_max, bool stopOnInjury, bool stopOnDeath)
 		: MenuItemDefault(caption),
-			m_time_min(time_min),
-			m_time_max(time_max),
-			stopIfInjured(stopOnInjury),
-			stopIfDead(stopOnDeath) {}
+		m_time_min(time_min),
+		m_time_max(time_max),
+		stopIfInjured(stopOnInjury),
+		stopIfDead(stopOnDeath) {}
 };
 
 class MenuItemPlayerInvincible : public MenuItemSwitchable
@@ -305,7 +307,7 @@ public:
 class MenuItemPlayerSuperJump : public MenuItemSwitchable
 {
 	virtual void OnFrame()
-	{		
+	{
 		if (GetState())
 			GAMEPLAY::SET_SUPER_JUMP_THIS_FRAME(PLAYER::PLAYER_ID());
 	}
@@ -367,14 +369,14 @@ class MenuItemPlayerTeleport : public MenuItemDefault
 		if (PED::IS_PED_ON_MOUNT(e))
 			e = PED::GET_MOUNT(e);
 		else
-		if (PED::IS_PED_IN_ANY_VEHICLE(e, FALSE))
-			e = PED::GET_VEHICLE_PED_IS_USING(e);
+			if (PED::IS_PED_IN_ANY_VEHICLE(e, FALSE))
+				e = PED::GET_VEHICLE_PED_IS_USING(e);
 		ENTITY::SET_ENTITY_COORDS(e, m_pos.x, m_pos.y, m_pos.z, 0, 0, 1, FALSE);
 	}
 public:
 	MenuItemPlayerTeleport(string caption, Vector3 pos)
-		: MenuItemDefault(caption), 
-		  m_pos(pos) {}
+		: MenuItemDefault(caption),
+		m_pos(pos) {}
 };
 
 class MenuItemPlayerTeleportToMarker : public MenuItemDefault
@@ -393,8 +395,8 @@ class MenuItemPlayerTeleportToMarker : public MenuItemDefault
 		if (PED::IS_PED_ON_MOUNT(e))
 			e = PED::GET_MOUNT(e);
 		else
-		if (PED::IS_PED_IN_ANY_VEHICLE(e, FALSE))
-			e = PED::GET_VEHICLE_PED_IS_USING(e);
+			if (PED::IS_PED_IN_ANY_VEHICLE(e, FALSE))
+				e = PED::GET_VEHICLE_PED_IS_USING(e);
 
 		if (!GAMEPLAY::GET_GROUND_Z_FOR_3D_COORD(coords.x, coords.y, 100.0, &coords.z, FALSE))
 		{
@@ -436,17 +438,17 @@ class MenuItemPlayerClearWanted : public MenuItemDefault
 			PURSUIT::SET_PLAYER_WANTED_INTENSITY(player, 0);
 		}
 		SetStatusText("Player has to be in pursuit\n\n"
-					  "head price: " + to_string(PURSUIT::GET_PLAYER_PRICE_ON_A_HEAD(player) / 100) + "\n" + 
-					  "wanted intensity: " + to_string(PURSUIT::GET_PLAYER_WANTED_INTENSITY(player) / 100));
+			"head price: " + to_string(PURSUIT::GET_PLAYER_PRICE_ON_A_HEAD(player) / 100) + "\n" +
+			"wanted intensity: " + to_string(PURSUIT::GET_PLAYER_WANTED_INTENSITY(player) / 100));
 	}
 public:
 	MenuItemPlayerClearWanted(string caption, bool headPrice, bool pursuit)
 		: MenuItemDefault(caption),
-			m_headPrice(headPrice), m_pursuit(pursuit) {}
+		m_headPrice(headPrice), m_pursuit(pursuit) {}
 };
 
 class MenuItemPlayerNeverWanted : public MenuItemSwitchable
-{	
+{
 	virtual void OnSelect()
 	{
 		bool newstate = !GetState();
@@ -476,14 +478,14 @@ class MenuItemChangePlayerModel : public MenuItemDefault
 
 	virtual void OnSelect()
 	{
-		DWORD model = GAMEPLAY::GET_HASH_KEY(const_cast<char *>(m_model.c_str()));
+		DWORD model = GAMEPLAY::GET_HASH_KEY(const_cast<char*>(m_model.c_str()));
 		if (STREAMING::IS_MODEL_IN_CDIMAGE(model) && STREAMING::IS_MODEL_VALID(model))
 		{
-			UINT64 *ptr1 = getGlobalPtr(0x28) + 0x27;
-			UINT64 *ptr2 = getGlobalPtr(((DWORD)7 << 18) | 0x1890C) + 2;
+			UINT64* ptr1 = getGlobalPtr(0x28) + 0x27;
+			UINT64* ptr2 = getGlobalPtr(((DWORD)7 << 18) | 0x1890C) + 2;
 			UINT64 bcp1 = *ptr1;
 			UINT64 bcp2 = *ptr2;
-			*ptr1 = *ptr2 = model;			
+			*ptr1 = *ptr2 = model;
 			WaitAndDraw(1000);
 			Ped playerPed = PLAYER::PLAYER_PED_ID();
 			PED::SET_PED_VISIBLE(playerPed, TRUE);
@@ -497,7 +499,7 @@ class MenuItemChangePlayerModel : public MenuItemDefault
 public:
 	MenuItemChangePlayerModel(string caption, string model)
 		: MenuItemDefault(caption),
-			m_model(model) { }
+		m_model(model) { }
 };
 
 class MenuItemSpawnPed : public MenuItemDefault
@@ -508,7 +510,7 @@ class MenuItemSpawnPed : public MenuItemDefault
 
 	virtual void OnSelect()
 	{
-		DWORD model = GAMEPLAY::GET_HASH_KEY(const_cast<char *>(GetModel().c_str()));
+		DWORD model = GAMEPLAY::GET_HASH_KEY(const_cast<char*>(GetModel().c_str()));
 		if (STREAMING::IS_MODEL_IN_CDIMAGE(model) && STREAMING::IS_MODEL_VALID(model))
 		{
 			STREAMING::REQUEST_MODEL(model, FALSE);
@@ -524,7 +526,7 @@ class MenuItemSpawnPed : public MenuItemDefault
 public:
 	MenuItemSpawnPed(string caption, string model)
 		: MenuItemDefault(caption),
-			m_model(model) { }
+		m_model(model) { }
 };
 
 class MenuItemSpawnHorseRandom : public MenuItemSpawnPed
@@ -548,8 +550,8 @@ public:
 
 class MenuItemSpawnAnimalRandom : public MenuItemSpawnPed
 {
-	virtual string GetModel()  
-	{ 
+	virtual string GetModel()
+	{
 		while (true)
 		{
 			int index = rand() % ARRAY_LENGTH(pedModelInfos);
@@ -592,12 +594,12 @@ class MenuItemSpawnVehicle : public MenuItemDefault
 	bool		m_resetHeading;
 	bool		m_noPeds;
 
-	MenuItemSwitchable * m_menuItemWrapIn;
-	MenuItemSwitchable * m_menuItemSetProperly;
+	MenuItemSwitchable* m_menuItemWrapIn;
+	MenuItemSwitchable* m_menuItemSetProperly;
 
 	virtual void OnSelect()
 	{
-		DWORD model = GAMEPLAY::GET_HASH_KEY(const_cast<char *>(m_model.c_str()));
+		DWORD model = GAMEPLAY::GET_HASH_KEY(const_cast<char*>(m_model.c_str()));
 		if (STREAMING::IS_MODEL_IN_CDIMAGE(model) && STREAMING::IS_MODEL_VALID(model))
 		{
 			STREAMING::REQUEST_MODEL(model, FALSE);
@@ -625,19 +627,19 @@ class MenuItemSpawnVehicle : public MenuItemDefault
 		}
 	}
 public:
-	MenuItemSpawnVehicle(string model, 
-		Vector3 pos, float heading, 
-		MenuItemSwitchable *menuItemWrapIn,
-		MenuItemSwitchable *menuItemSetProperly,
-		bool resetHeading, 
+	MenuItemSpawnVehicle(string model,
+		Vector3 pos, float heading,
+		MenuItemSwitchable* menuItemWrapIn,
+		MenuItemSwitchable* menuItemSetProperly,
+		bool resetHeading,
 		bool noPeds)
-		: MenuItemDefault(model),			
-			m_model(model), 
-			m_pos(pos), m_heading(heading),
-			m_menuItemWrapIn(menuItemWrapIn),
-			m_menuItemSetProperly(menuItemSetProperly),
-			m_resetHeading(resetHeading), 
-			m_noPeds(noPeds) { }
+		: MenuItemDefault(model),
+		m_model(model),
+		m_pos(pos), m_heading(heading),
+		m_menuItemWrapIn(menuItemWrapIn),
+		m_menuItemSetProperly(menuItemSetProperly),
+		m_resetHeading(resetHeading),
+		m_noPeds(noPeds) { }
 };
 
 class MenuItemGiveWeapon : public MenuItemDefault
@@ -646,7 +648,7 @@ class MenuItemGiveWeapon : public MenuItemDefault
 
 	virtual void OnSelect()
 	{
-		Hash hash = GAMEPLAY::GET_HASH_KEY(const_cast<char *>(("WEAPON_" + m_name).c_str()));
+		Hash hash = GAMEPLAY::GET_HASH_KEY(const_cast<char*>(("WEAPON_" + m_name).c_str()));
 		Ped playerPed = PLAYER::PLAYER_PED_ID();
 		WEAPON::GIVE_DELAYED_WEAPON_TO_PED(playerPed, hash, 100, 1, 0x2cd419dc);
 		WEAPON::SET_PED_AMMO(playerPed, hash, 100);
@@ -655,7 +657,7 @@ class MenuItemGiveWeapon : public MenuItemDefault
 public:
 	MenuItemGiveWeapon(string caption, string weaponName)
 		: MenuItemDefault(caption),
-			m_name(weaponName) {}
+		m_name(weaponName) {}
 };
 
 class MenuItemWeaponPowerfullGuns : public MenuItemSwitchable
@@ -752,19 +754,19 @@ public:
 
 class MenuItemTimeTitle : public MenuItemTitle
 {
-    virtual string GetCaption()
-    {
-        time_t now = time(0);
-        tm t;
-        localtime_s(&t, &now);
-        char str[32];
-        sprintf_s(str, "%02d:%02d", TIME::GET_CLOCK_HOURS(), TIME::GET_CLOCK_MINUTES());
-        return MenuItemTitle::GetCaption() + "   " + str;
-    }
+	virtual string GetCaption()
+	{
+		time_t now = time(0);
+		tm t;
+		localtime_s(&t, &now);
+		char str[32];
+		sprintf_s(str, "%02d:%02d", TIME::GET_CLOCK_HOURS(), TIME::GET_CLOCK_MINUTES());
+		return MenuItemTitle::GetCaption() + "   " + str;
+	}
 
 public:
-    MenuItemTimeTitle(string caption)
-        : MenuItemTitle(caption) {}
+	MenuItemTimeTitle(string caption)
+		: MenuItemTitle(caption) {}
 };
 
 class MenuItemTimeAdjust : public MenuItemDefault
@@ -777,7 +779,7 @@ class MenuItemTimeAdjust : public MenuItemDefault
 public:
 	MenuItemTimeAdjust(string caption, int difHours)
 		: MenuItemDefault(caption),
-			m_difHours(difHours) {}
+		m_difHours(difHours) {}
 };
 
 class MenuItemTimePause : public MenuItemSwitchable
@@ -823,23 +825,24 @@ class MenuItemTimeRealistic : public MenuItemSwitchable
 		{
 			mins -= 60;
 			hours++;
-		} else
-		if (mins < 0)
-		{
-			mins += 60;
-			hours--;
 		}
+		else
+			if (mins < 0)
+			{
+				mins += 60;
+				hours--;
+			}
 		if (hours >= 24)
 			hours -= 24;
 		else
-		if (hours < 0)
-			hours += 24;
+			if (hours < 0)
+				hours += 24;
 		TIME::SET_CLOCK_TIME(hours, mins, t.tm_sec);
 	}
 public:
 	MenuItemTimeRealistic(string caption)
 		: MenuItemSwitchable(caption),
-			m_difHour(0), m_difMin(0) {}
+		m_difHour(0), m_difMin(0) {}
 };
 
 class MenuItemTimeSystemSynced : public MenuItemSwitchable
@@ -852,13 +855,12 @@ class MenuItemTimeSystemSynced : public MenuItemSwitchable
 			tm t;
 			localtime_s(&t, &now);
 			TIME::SET_CLOCK_TIME(t.tm_hour, t.tm_min, t.tm_sec);
-		}		
+		}
 	}
 public:
 	MenuItemTimeSystemSynced(string caption)
 		: MenuItemSwitchable(caption) {}
 };
-
 
 class MenuItemWeatherFreeze : public MenuItemSwitchable
 {
@@ -888,7 +890,8 @@ class MenuItemWeatherWind : public MenuItemSwitchable
 		{
 			GAMEPLAY::SET_WIND_SPEED(50.0);
 			GAMEPLAY::SET_WIND_DIRECTION(ENTITY::GET_ENTITY_HEADING(PLAYER::PLAYER_PED_ID()));
-		} else
+		}
+		else
 		{
 			GAMEPLAY::SET_WIND_SPEED(0.0);
 		}
@@ -904,7 +907,7 @@ class MenuItemWeatherSelect : public MenuItemDefault
 	virtual void OnSelect()
 	{
 		GAMEPLAY::CLEAR_OVERRIDE_WEATHER();
-		Hash weather = GAMEPLAY::GET_HASH_KEY(const_cast<char *>(GetCaption().c_str()));		
+		Hash weather = GAMEPLAY::GET_HASH_KEY(const_cast<char*>(GetCaption().c_str()));
 		GAMEPLAY::SET_WEATHER_TYPE(weather, TRUE, TRUE, FALSE, 0.0, FALSE);
 		GAMEPLAY::CLEAR_WEATHER_TYPE_PERSIST();
 	}
@@ -1060,86 +1063,86 @@ class MenuItemMiscTransportGuns : public MenuItemSwitchable
 public:
 	MenuItemMiscTransportGuns(string caption, bool isHorse, bool isBullet)
 		: MenuItemSwitchable(caption),
-			m_isHorse(isHorse), m_isBullet(isBullet),
-			m_lastShootTime(0) {}
+		m_isHorse(isHorse), m_isBullet(isBullet),
+		m_lastShootTime(0) {}
 };
 
-MenuBase *CreatePlayerTeleportMenu(MenuController *controller)
+MenuBase* CreatePlayerTeleportMenu(MenuController* controller)
 {
-	MenuBase *menu = new MenuBase(new MenuItemListTitle("TELEPORT"));
+	MenuBase* menu = new MenuBase(new MenuItemListTitle("TELEPORT"));
 	controller->RegisterMenu(menu);
 
 	menu->AddItem(new MenuItemPlayerTeleportToMarker("MARKER"));
 
-	menu->AddItem(new MenuItemPlayerTeleport("SOUTH MAP",     { -5311.2583,  -4612.00,   -10.63389 }));
-	menu->AddItem(new MenuItemPlayerTeleport("SOUTH GUAMA",   { 1315.66381,  -6815.48,   42.377101 }));
-	menu->AddItem(new MenuItemPlayerTeleport("ANNESBURG",     { 2898.593994, 1239.85253, 44.073299 }));
-	menu->AddItem(new MenuItemPlayerTeleport("STRAWBERRY",	  { -1725.22143, -418.11560, 153.55740 }));
-	menu->AddItem(new MenuItemPlayerTeleport("VALENTINE",	  { -213.152496, 691.802979, 112.37100 }));
-	menu->AddItem(new MenuItemPlayerTeleport("RHODES",		  { 1282.707520, -1275.7485, 74.945099 }));
-	menu->AddItem(new MenuItemPlayerTeleport("SAINT DENIS",   { 2336.584961, -1106.2358, 44.737598 }));
-	menu->AddItem(new MenuItemPlayerTeleport("WAPITI",		  { 538.738525,  2217.46557, 240.23280 }));
-	menu->AddItem(new MenuItemPlayerTeleport("BUTCHERCREEK",  { 2552.203613, 835.510010, 81.183098 }));
-	menu->AddItem(new MenuItemPlayerTeleport("BLACKWATER",	  { -798.338379, -1238.9395, 43.537899 }));
-	menu->AddItem(new MenuItemPlayerTeleport("BEECHERS",	  { -1653.19738, -1448.8156, 82.503502 }));
-	menu->AddItem(new MenuItemPlayerTeleport("CALIGA HALL",   { 1705.509888, -1386.3237, 42.884998 }));	
-	menu->AddItem(new MenuItemPlayerTeleport("BRAITHWAITE",   { 1011.190674, -1661.6768, 45.918301 }));	
-	menu->AddItem(new MenuItemPlayerTeleport("VANHORN",		  { 2982.234863, 445.724915, 51.491501 }));	
-	menu->AddItem(new MenuItemPlayerTeleport("CORNWALL",	  { 437.7247920, 494.582092, 107.67649 }));
-	menu->AddItem(new MenuItemPlayerTeleport("COLTER",		  { -1371.6590,  2388.5073,  307.7218  }));
-	menu->AddItem(new MenuItemPlayerTeleport("EMERALD RANCH", { 1332.332642, 300.425110, 86.306297 }));	
-	menu->AddItem(new MenuItemPlayerTeleport("PRONGHORN",	  { -2616.57714, 519.256775, 144.10809 }));
-	menu->AddItem(new MenuItemPlayerTeleport("MANZANITA POST",{ -1977.98754, -1545.6749, 112.87020 }));
-	menu->AddItem(new MenuItemPlayerTeleport("LAGRAS",		  { 2111.099121, -662.25317, 41.259899 }));
-	menu->AddItem(new MenuItemPlayerTeleport("ARMADILLO",	  { -3622.65527, -2586.5795, -15.36900 }));
-	menu->AddItem(new MenuItemPlayerTeleport("TUMBLEWEED",	  { -5382.39453, -2940.1596, 1.582700  }));	
+	menu->AddItem(new MenuItemPlayerTeleport("SOUTH MAP", { -5311.2583,  -4612.00,   -10.63389 }));
+	menu->AddItem(new MenuItemPlayerTeleport("SOUTH GUAMA", { 1315.66381,  -6815.48,   42.377101 }));
+	menu->AddItem(new MenuItemPlayerTeleport("ANNESBURG", { 2898.593994, 1239.85253, 44.073299 }));
+	menu->AddItem(new MenuItemPlayerTeleport("STRAWBERRY", { -1725.22143, -418.11560, 153.55740 }));
+	menu->AddItem(new MenuItemPlayerTeleport("VALENTINE", { -213.152496, 691.802979, 112.37100 }));
+	menu->AddItem(new MenuItemPlayerTeleport("RHODES", { 1282.707520, -1275.7485, 74.945099 }));
+	menu->AddItem(new MenuItemPlayerTeleport("SAINT DENIS", { 2336.584961, -1106.2358, 44.737598 }));
+	menu->AddItem(new MenuItemPlayerTeleport("WAPITI", { 538.738525,  2217.46557, 240.23280 }));
+	menu->AddItem(new MenuItemPlayerTeleport("BUTCHERCREEK", { 2552.203613, 835.510010, 81.183098 }));
+	menu->AddItem(new MenuItemPlayerTeleport("BLACKWATER", { -798.338379, -1238.9395, 43.537899 }));
+	menu->AddItem(new MenuItemPlayerTeleport("BEECHERS", { -1653.19738, -1448.8156, 82.503502 }));
+	menu->AddItem(new MenuItemPlayerTeleport("CALIGA HALL", { 1705.509888, -1386.3237, 42.884998 }));
+	menu->AddItem(new MenuItemPlayerTeleport("BRAITHWAITE", { 1011.190674, -1661.6768, 45.918301 }));
+	menu->AddItem(new MenuItemPlayerTeleport("VANHORN", { 2982.234863, 445.724915, 51.491501 }));
+	menu->AddItem(new MenuItemPlayerTeleport("CORNWALL", { 437.7247920, 494.582092, 107.67649 }));
+	menu->AddItem(new MenuItemPlayerTeleport("COLTER", { -1371.6590,  2388.5073,  307.7218 }));
+	menu->AddItem(new MenuItemPlayerTeleport("EMERALD RANCH", { 1332.332642, 300.425110, 86.306297 }));
+	menu->AddItem(new MenuItemPlayerTeleport("PRONGHORN", { -2616.57714, 519.256775, 144.10809 }));
+	menu->AddItem(new MenuItemPlayerTeleport("MANZANITA POST", { -1977.98754, -1545.6749, 112.87020 }));
+	menu->AddItem(new MenuItemPlayerTeleport("LAGRAS", { 2111.099121, -662.25317, 41.259899 }));
+	menu->AddItem(new MenuItemPlayerTeleport("ARMADILLO", { -3622.65527, -2586.5795, -15.36900 }));
+	menu->AddItem(new MenuItemPlayerTeleport("TUMBLEWEED", { -5382.39453, -2940.1596, 1.582700 }));
 	menu->AddItem(new MenuItemPlayerTeleport("MACFARLANES RANCH", { -2296.26318, -2454.4101, 60.969898 }));
-	menu->AddItem(new MenuItemPlayerTeleport("BENEDICT POINT",{ -5269.60400, -3411.0588, -23.15930 }));		
+	menu->AddItem(new MenuItemPlayerTeleport("BENEDICT POINT", { -5269.60400, -3411.0588, -23.15930 }));
 
 	return menu;
 }
 
-MenuBase *CreatePlayerChangeModelHorseMenu(MenuController *controller)
+MenuBase* CreatePlayerChangeModelHorseMenu(MenuController* controller)
 {
 	auto menu = new MenuBase(new MenuItemListTitle("HORSE  MODELS"));
 	controller->RegisterMenu(menu);
 
 	unordered_map<string, vector<pair<string, string>>> breeds;
-	for each (auto &modelInfo in pedModelInfos)
+	for each (auto & modelInfo in pedModelInfos)
 		if (modelInfo.horse)
-		{				
+		{
 			size_t pos = modelInfo.name.find_first_of(' ');
 			string breed = modelInfo.name.substr(0, pos);
 			string kind = modelInfo.name.substr(pos + 1, modelInfo.name.size() - pos - 1);
 			breeds[breed].push_back({ kind, modelInfo.model });
 		}
 
-	for each (auto &breed in breeds)
+	for each (auto & breed in breeds)
 	{
 		auto breedMenu = new MenuBase(new MenuItemListTitle(breed.first));
 		controller->RegisterMenu(breedMenu);
 		menu->AddItem(new MenuItemMenu(breed.first, breedMenu));
-		for each (auto &kindAndModel in breed.second)
+		for each (auto & kindAndModel in breed.second)
 			breedMenu->AddItem(new MenuItemChangePlayerModel(kindAndModel.first, kindAndModel.second));
-	}	
+	}
 
 	return menu;
 }
 
-MenuBase *CreatePlayerChangeModelAnimalMenuExactFilter(MenuController *controller, bool horse, bool dog, bool fish)
+MenuBase* CreatePlayerChangeModelAnimalMenuExactFilter(MenuController* controller, bool horse, bool dog, bool fish)
 {
 	auto menu = new MenuBase(new MenuItemListTitle("ANIMAL  MODELS"));
 	controller->RegisterMenu(menu);
 
-	for each (auto &modelInfo in pedModelInfos)
+	for each (auto & modelInfo in pedModelInfos)
 		if (modelInfo.animal &&
 			modelInfo.horse == horse && modelInfo.dog == dog && modelInfo.fish == fish)
-				menu->AddItem(new MenuItemChangePlayerModel(modelInfo.name, modelInfo.model));
+			menu->AddItem(new MenuItemChangePlayerModel(modelInfo.name, modelInfo.model));
 
 	return menu;
 }
 
-MenuBase *CreatePlayerChangeModelAnimalMenu(MenuController *controller)
+MenuBase* CreatePlayerChangeModelAnimalMenu(MenuController* controller)
 {
 	auto menu = new MenuBase(new MenuItemTitle("ANIMAL  MODELS"));
 	controller->RegisterMenu(menu);
@@ -1152,21 +1155,21 @@ MenuBase *CreatePlayerChangeModelAnimalMenu(MenuController *controller)
 	return menu;
 }
 
-MenuBase *CreatePlayerChangeModelHumanMenuExactFilter(MenuController *controller, bool cutscene, bool male, bool female, bool young, bool middleaged, bool old)
+MenuBase* CreatePlayerChangeModelHumanMenuExactFilter(MenuController* controller, bool cutscene, bool male, bool female, bool young, bool middleaged, bool old)
 {
 	auto menu = new MenuBase(new MenuItemListTitle("PED  MODELS"));
 	controller->RegisterMenu(menu);
 
-	for each (auto &modelInfo in pedModelInfos)
+	for each (auto & modelInfo in pedModelInfos)
 		if (!modelInfo.animal &&
 			modelInfo.cutscene == cutscene && modelInfo.male == male && modelInfo.female == female &&
 			modelInfo.young == young && modelInfo.middleaged == middleaged && modelInfo.old == old)
-				menu->AddItem(new MenuItemChangePlayerModel(modelInfo.name, modelInfo.model));
+			menu->AddItem(new MenuItemChangePlayerModel(modelInfo.name, modelInfo.model));
 
 	return menu;
 }
 
-MenuBase *CreatePlayerChangeModelHumanMenu(MenuController *controller)
+MenuBase* CreatePlayerChangeModelHumanMenu(MenuController* controller)
 {
 	auto menu = new MenuBase(new MenuItemTitle("PED  MODELS"));
 	controller->RegisterMenu(menu);
@@ -1183,7 +1186,7 @@ MenuBase *CreatePlayerChangeModelHumanMenu(MenuController *controller)
 	return menu;
 }
 
-MenuBase *CreatePlayerChangeModelMenu(MenuController *controller)
+MenuBase* CreatePlayerChangeModelMenu(MenuController* controller)
 {
 	auto menu = new MenuBase(new MenuItemTitle("SKIN  CHANGER"));
 	controller->RegisterMenu(menu);
@@ -1194,9 +1197,9 @@ MenuBase *CreatePlayerChangeModelMenu(MenuController *controller)
 	return menu;
 }
 
-MenuBase *CreatePlayerWantedMenu(MenuController *controller)
+MenuBase* CreatePlayerWantedMenu(MenuController* controller)
 {
-	MenuBase *menu = new MenuBase(new MenuItemTitle("WANTED  OPTIONS"));
+	MenuBase* menu = new MenuBase(new MenuItemTitle("WANTED  OPTIONS"));
 	controller->RegisterMenu(menu);
 
 	menu->AddItem(new MenuItemPlayerClearWanted("CLEAR BOUNTY", true, false));
@@ -1206,9 +1209,9 @@ MenuBase *CreatePlayerWantedMenu(MenuController *controller)
 	return menu;
 }
 
-MenuBase *CreatePlayerTransportMenu(MenuController *controller)
+MenuBase* CreatePlayerTransportMenu(MenuController* controller)
 {
-	MenuBase *menu = new MenuBase(new MenuItemTitle("TRANSPORT  OPTIONS"));
+	MenuBase* menu = new MenuBase(new MenuItemTitle("TRANSPORT  OPTIONS"));
 	controller->RegisterMenu(menu);
 
 	menu->AddItem(new MenuItemPlayerHorseInvincible("INVINCIBLE HORSE"));
@@ -1219,9 +1222,9 @@ MenuBase *CreatePlayerTransportMenu(MenuController *controller)
 	return menu;
 }
 
-MenuBase *CreatePlayerMiscMenu(MenuController *controller)
+MenuBase* CreatePlayerMiscMenu(MenuController* controller)
 {
-	MenuBase *menu = new MenuBase(new MenuItemTitle("PLAYER  MISC"));
+	MenuBase* menu = new MenuBase(new MenuItemTitle("PLAYER  MISC"));
 	controller->RegisterMenu(menu);
 
 	menu->AddItem(new MenuItemPlayerEveryoneIgnored("EVERYONE IGNORED"));
@@ -1231,9 +1234,9 @@ MenuBase *CreatePlayerMiscMenu(MenuController *controller)
 	return menu;
 }
 
-MenuBase *CreatePlayerMenu(MenuController *controller)
+MenuBase* CreatePlayerMenu(MenuController* controller)
 {
-	MenuBase *menu = new MenuBase(new MenuItemTitle("PLAYER  OPTIONS"));
+	MenuBase* menu = new MenuBase(new MenuItemTitle("PLAYER  OPTIONS"));
 	controller->RegisterMenu(menu);
 
 	menu->AddItem(new MenuItemMenu("TRANSPORT", CreatePlayerTransportMenu(controller)));
@@ -1244,8 +1247,8 @@ MenuBase *CreatePlayerMenu(MenuController *controller)
 	menu->AddItem(new MenuItemPlayerAddCash("ADD CASH", 1000 * 100));
 	menu->AddItem(new MenuItemPlayerRagdoll("RAGDOLL", 5000, 5000, false, false));
 	menu->AddItem(new MenuItemPlayerFastHeal("FAST HEAL"));
-	menu->AddItem(new MenuItemPlayerInvincible("INVINCIBLE"));	
-	menu->AddItem(new MenuItemPlayerUnlimStamina("UNLIM STAMINA"));	
+	menu->AddItem(new MenuItemPlayerInvincible("INVINCIBLE"));
+	menu->AddItem(new MenuItemPlayerUnlimStamina("UNLIM STAMINA"));
 	menu->AddItem(new MenuItemPlayerUnlimAbility("UNLIM ABILITY"));
 	menu->AddItem(new MenuItemPlayerDrunk("DRUNK"));
 	menu->AddItem(new MenuItemNoRagdoll("NO RAGDOLL"));
@@ -1254,7 +1257,7 @@ MenuBase *CreatePlayerMenu(MenuController *controller)
 	return menu;
 }
 
-MenuBase *CreateHorseSpawnerMenu(MenuController *controller)
+MenuBase* CreateHorseSpawnerMenu(MenuController* controller)
 {
 	auto menu = new MenuBase(new MenuItemListTitle("HORSE  SPAWNER"));
 	controller->RegisterMenu(menu);
@@ -1262,41 +1265,41 @@ MenuBase *CreateHorseSpawnerMenu(MenuController *controller)
 	menu->AddItem(new MenuItemSpawnHorseRandom("random horse"));
 
 	unordered_map<string, vector<pair<string, string>>> breeds;
-	for each (auto &modelInfo in pedModelInfos)
+	for each (auto & modelInfo in pedModelInfos)
 		if (modelInfo.horse)
-		{				
+		{
 			size_t pos = modelInfo.name.find_first_of(' ');
 			string breed = modelInfo.name.substr(0, pos);
 			string kind = modelInfo.name.substr(pos + 1, modelInfo.name.size() - pos - 1);
 			breeds[breed].push_back({ kind, modelInfo.model });
 		}
 
-	for each (auto &breed in breeds)
+	for each (auto & breed in breeds)
 	{
 		auto breedMenu = new MenuBase(new MenuItemListTitle(breed.first));
 		controller->RegisterMenu(breedMenu);
 		menu->AddItem(new MenuItemMenu(breed.first, breedMenu));
-		for each (auto &kindAndModel in breed.second)
+		for each (auto & kindAndModel in breed.second)
 			breedMenu->AddItem(new MenuItemSpawnPed(kindAndModel.first, kindAndModel.second));
-	}	
+	}
 
 	return menu;
 }
 
-MenuBase *CreateAnimalSpawnerMenuExactFilter(MenuController *controller, bool horse, bool dog, bool fish)
+MenuBase* CreateAnimalSpawnerMenuExactFilter(MenuController* controller, bool horse, bool dog, bool fish)
 {
 	auto menu = new MenuBase(new MenuItemListTitle("ANIMAL  SPAWNER"));
 	controller->RegisterMenu(menu);
 
-	for each (auto &modelInfo in pedModelInfos)
+	for each (auto & modelInfo in pedModelInfos)
 		if (modelInfo.animal &&
 			modelInfo.horse == horse && modelInfo.dog == dog && modelInfo.fish == fish)
-				menu->AddItem(new MenuItemSpawnPed(modelInfo.name, modelInfo.model));
+			menu->AddItem(new MenuItemSpawnPed(modelInfo.name, modelInfo.model));
 
 	return menu;
 }
 
-MenuBase *CreateAnimalSpawnerMenu(MenuController *controller)
+MenuBase* CreateAnimalSpawnerMenu(MenuController* controller)
 {
 	auto menu = new MenuBase(new MenuItemTitle("ANIMAL  SPAWNER"));
 	controller->RegisterMenu(menu);
@@ -1310,21 +1313,21 @@ MenuBase *CreateAnimalSpawnerMenu(MenuController *controller)
 	return menu;
 }
 
-MenuBase *CreateHumanSpawnerMenuExactFilter(MenuController *controller, bool cutscene, bool male, bool female, bool young, bool middleaged, bool old)
+MenuBase* CreateHumanSpawnerMenuExactFilter(MenuController* controller, bool cutscene, bool male, bool female, bool young, bool middleaged, bool old)
 {
 	auto menu = new MenuBase(new MenuItemListTitle("PED  SPAWNER"));
 	controller->RegisterMenu(menu);
 
-	for each (auto &modelInfo in pedModelInfos)
+	for each (auto & modelInfo in pedModelInfos)
 		if (!modelInfo.animal &&
 			modelInfo.cutscene == cutscene && modelInfo.male == male && modelInfo.female == female &&
 			modelInfo.young == young && modelInfo.middleaged == middleaged && modelInfo.old == old)
-				menu->AddItem(new MenuItemSpawnPed(modelInfo.name, modelInfo.model));
+			menu->AddItem(new MenuItemSpawnPed(modelInfo.name, modelInfo.model));
 
 	return menu;
 }
 
-MenuBase *CreateHumanSpawnerMenu(MenuController *controller)
+MenuBase* CreateHumanSpawnerMenu(MenuController* controller)
 {
 	auto menu = new MenuBase(new MenuItemTitle("PED  SPAWNER"));
 	controller->RegisterMenu(menu);
@@ -1337,7 +1340,7 @@ MenuBase *CreateHumanSpawnerMenu(MenuController *controller)
 	menu->AddItem(new MenuItemMenu("FEMALE YOUNG", CreateHumanSpawnerMenuExactFilter(controller, false, false, true, true, false, false)));
 	menu->AddItem(new MenuItemMenu("FEMALE MIDDLE", CreateHumanSpawnerMenuExactFilter(controller, false, false, true, false, true, false)));
 	menu->AddItem(new MenuItemMenu("FEMALE OLD", CreateHumanSpawnerMenuExactFilter(controller, false, false, true, false, false, true)));
-	menu->AddItem(new MenuItemMenu("MISC", CreateHumanSpawnerMenuExactFilter(controller, false, false, false, false, false, false)));	
+	menu->AddItem(new MenuItemMenu("MISC", CreateHumanSpawnerMenuExactFilter(controller, false, false, false, false, false, false)));
 
 	return menu;
 }
@@ -1347,13 +1350,13 @@ enum eVehicleType
 	vtAirbaloon,
 	vtBoat,
 	vtCannon,
-	vtTrain,	
+	vtTrain,
 	vtWagon
 };
 
 eVehicleType GetVehicleTypeUsingModel(string model)
 {
-	Hash hash = GAMEPLAY::GET_HASH_KEY(const_cast<char *>(model.c_str()));
+	Hash hash = GAMEPLAY::GET_HASH_KEY(const_cast<char*>(model.c_str()));
 	if (VEHICLE::IS_THIS_MODEL_A_BOAT(hash))
 		return vtBoat;
 	if (VEHICLE::IS_THIS_MODEL_A_TRAIN(hash))
@@ -1365,7 +1368,7 @@ eVehicleType GetVehicleTypeUsingModel(string model)
 	return vtWagon;
 }
 
-MenuBase *CreateCannonSpawnerMenu(MenuController *controller)
+MenuBase* CreateCannonSpawnerMenu(MenuController* controller)
 {
 	auto menu = new MenuBase(new MenuItemTitle("CANNON  SPAWNER"));
 	controller->RegisterMenu(menu);
@@ -1376,64 +1379,64 @@ MenuBase *CreateCannonSpawnerMenu(MenuController *controller)
 	auto menuItemSetProperly = new MenuItemSwitchable("SET PROPERLY");
 	menu->AddItem(menuItemSetProperly);
 
-	for each (auto &model in vehicleModels)
+	for each (auto & model in vehicleModels)
 		if (GetVehicleTypeUsingModel(model) == vtCannon)
 			menu->AddItem(new MenuItemSpawnVehicle(model, { 0.0, 3.0, 0.0 }, 0.0, menuItemWrapIn, menuItemSetProperly, true, false));
 
 	return menu;
 }
 
-MenuBase *CreateBoatSpawnerMenu(MenuController *controller, 
-	MenuItemSwitchable *menuItemWrapIn, MenuItemSwitchable *menuItemSetProperly)
+MenuBase* CreateBoatSpawnerMenu(MenuController* controller,
+	MenuItemSwitchable* menuItemWrapIn, MenuItemSwitchable* menuItemSetProperly)
 {
 	auto menu = new MenuBase(new MenuItemListTitle("BOAT  SPAWNER"));
 	controller->RegisterMenu(menu);
 
-	for each (auto &model in vehicleModels)
+	for each (auto & model in vehicleModels)
 		if (GetVehicleTypeUsingModel(model) == vtBoat)
 			menu->AddItem(new MenuItemSpawnVehicle(model, { 0.0, 10.0, 0.0 }, 90.0, menuItemWrapIn, menuItemSetProperly, false, false));
 
 	return menu;
 }
 
-MenuBase *CreateTrainSpawnerMenu(MenuController *controller)
+MenuBase* CreateTrainSpawnerMenu(MenuController* controller)
 {
 	auto menu = new MenuBase(new MenuItemListTitle("TRAIN  SPAWNER"));
 	controller->RegisterMenu(menu);
 
-	for each (auto &model in vehicleModels)
+	for each (auto & model in vehicleModels)
 		if (GetVehicleTypeUsingModel(model) == vtTrain)
 			menu->AddItem(new MenuItemSpawnVehicle(model, { 0.0, 5.0, -1.0 }, 90.0, NULL, NULL, false, false));
 
 	return menu;
 }
 
-MenuBase *CreateWagonSpawnerMenu(MenuController *controller, 
-	MenuItemSwitchable *menuItemWrapIn, MenuItemSwitchable *menuItemSetProperly, bool noPeds)
+MenuBase* CreateWagonSpawnerMenu(MenuController* controller,
+	MenuItemSwitchable* menuItemWrapIn, MenuItemSwitchable* menuItemSetProperly, bool noPeds)
 {
 	auto menu = new MenuBase(new MenuItemListTitle("WAGON  SPAWNER"));
 	controller->RegisterMenu(menu);
 
-	for each (auto &model in vehicleModels)
+	for each (auto & model in vehicleModels)
 		if (GetVehicleTypeUsingModel(model) == vtWagon)
 			menu->AddItem(new MenuItemSpawnVehicle(model, { 1.0, 5.0, 0.0 }, 90.0, menuItemWrapIn, menuItemSetProperly, true, noPeds));
 
 	return menu;
 }
 
-MenuBase *CreateVehicleMiscSpawnerMenu(MenuController *controller, MenuItemSwitchable *menuItemWrapIn)
+MenuBase* CreateVehicleMiscSpawnerMenu(MenuController* controller, MenuItemSwitchable* menuItemWrapIn)
 {
 	auto menu = new MenuBase(new MenuItemListTitle("MISC  SPAWNER"));
 	controller->RegisterMenu(menu);
 
-	for each (auto &model in vehicleModels)
+	for each (auto & model in vehicleModels)
 		if (GetVehicleTypeUsingModel(model) == vtAirbaloon)
 			menu->AddItem(new MenuItemSpawnVehicle(model, { 0.0, 5.0, 0.0 }, 0.0, menuItemWrapIn, NULL, false, false));
 
 	return menu;
 }
 
-MenuBase *CreateVehicleSpawnerMenu(MenuController *controller)
+MenuBase* CreateVehicleSpawnerMenu(MenuController* controller)
 {
 	auto menu = new MenuBase(new MenuItemTitle("VEHICLE  SPAWNER"));
 	controller->RegisterMenu(menu);
@@ -1453,7 +1456,7 @@ MenuBase *CreateVehicleSpawnerMenu(MenuController *controller)
 	return menu;
 }
 
-MenuBase *CreateWeaponSelectMenu(MenuController *controller)
+MenuBase* CreateWeaponSelectMenu(MenuController* controller)
 {
 	auto menu = new MenuBase(new MenuItemListTitle("GET WEAPON"));
 	controller->RegisterMenu(menu);
@@ -1464,7 +1467,7 @@ MenuBase *CreateWeaponSelectMenu(MenuController *controller)
 	return menu;
 }
 
-MenuBase *CreateWeaponMenu(MenuController *controller)
+MenuBase* CreateWeaponMenu(MenuController* controller)
 {
 	auto menu = new MenuBase(new MenuItemTitle("WEAPON  OPTIONS"));
 	controller->RegisterMenu(menu);
@@ -1478,7 +1481,7 @@ MenuBase *CreateWeaponMenu(MenuController *controller)
 	return menu;
 }
 
-MenuBase *CreateTimeMenu(MenuController *controller)
+MenuBase* CreateTimeMenu(MenuController* controller)
 {
 	auto menu = new MenuBase(new MenuItemTimeTitle("TIME"));
 	controller->RegisterMenu(menu);
@@ -1492,7 +1495,7 @@ MenuBase *CreateTimeMenu(MenuController *controller)
 	return menu;
 }
 
-MenuBase *CreateWeatherMenu(MenuController *controller)
+MenuBase* CreateWeatherMenu(MenuController* controller)
 {
 	auto menu = new MenuBase(new MenuItemListTitle("WEATHER"));
 	controller->RegisterMenu(menu);
@@ -1506,7 +1509,7 @@ MenuBase *CreateWeatherMenu(MenuController *controller)
 	return menu;
 }
 
-MenuBase *CreateMiscMenu(MenuController *controller)
+MenuBase* CreateMiscMenu(MenuController* controller)
 {
 	auto menu = new MenuBase(new MenuItemTitle("MISC  OPTIONS"));
 	controller->RegisterMenu(menu);
@@ -1525,7 +1528,7 @@ MenuBase *CreateMiscMenu(MenuController *controller)
 	return menu;
 }
 
-MenuBase *CreateMainMenu(MenuController *controller)
+MenuBase* CreateMainMenu(MenuController* controller)
 {
 	auto menu = new MenuBase(new MenuItemTitle("cvsTrainer 1.0.3"));
 	controller->RegisterMenu(menu);
@@ -1539,7 +1542,7 @@ MenuBase *CreateMainMenu(MenuController *controller)
 	menu->AddItem(new MenuItemMenu("TIME", CreateTimeMenu(controller)));
 	menu->AddItem(new MenuItemMenu("WEATHER", CreateWeatherMenu(controller)));
 	menu->AddItem(new MenuItemMenu("MISC", CreateMiscMenu(controller)));
-	
+
 	return menu;
 }
 
@@ -1547,9 +1550,9 @@ void main()
 {
 	auto menuController = new MenuController();
 	auto mainMenu = CreateMainMenu(menuController);
-	
+
 	while (true)
-	{		
+	{
 		if (!menuController->HasActiveMenu() && MenuInput::MenuSwitchPressed())
 		{
 			MenuInput::MenuInputBeep();
