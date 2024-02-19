@@ -1,0 +1,19 @@
+﻿  script.cpp
+C:\Users\cvs0_\Desktop\rdr2_modding\scripthookrdr2\projects\NativeTrainer\scriptmenu.h(246,65): warning C4244: '=': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
+  (compiling source file 'script.cpp')
+  
+C:\Users\cvs0_\Desktop\rdr2_modding\scripthookrdr2\projects\NativeTrainer\script.cpp(1058,35): warning C4244: '=': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
+C:\Users\cvs0_\Desktop\rdr2_modding\scripthookrdr2\projects\NativeTrainer\script.cpp(1565,22): warning C4244: 'argument': conversion from 'ULONGLONG' to 'unsigned int', possible loss of data
+  scriptmenu.cpp
+C:\Users\cvs0_\Desktop\rdr2_modding\scripthookrdr2\projects\NativeTrainer\scriptmenu.h(246,65): warning C4244: '=': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
+  (compiling source file 'scriptmenu.cpp')
+  
+C:\Users\cvs0_\Desktop\rdr2_modding\scripthookrdr2\projects\NativeTrainer\scriptmenu.cpp(21,13): warning C4244: 'initializing': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
+  Generating code
+  17 of 1033 functions ( 1.6%) were compiled, the rest were copied from previous compilation.
+    5 functions were new in current compilation
+    50 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  NativeTrainer.vcxproj -> C:\Users\cvs0_\Desktop\rdr2_modding\scripthookrdr2\projects\NativeTrainer\bin\Release\NativeTrainer.asi
+  'pwsh.exe' is not recognized as an internal or external command,
+  operable program or batch file.
