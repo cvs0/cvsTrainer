@@ -1584,7 +1584,7 @@ MenuBase* CreateMiscMenu(MenuController* controller)
 
 MenuBase* CreateMainMenu(MenuController* controller)
 {
-	auto menu = new MenuBase(new MenuItemTitle("cvsTrainer 1.0.4"));
+	auto menu = new MenuBase(new MenuItemTitle("cvsTrainer 1.0.5"));
 	controller->RegisterMenu(menu);
 
 	menu->AddItem(new MenuItemMenu("PLAYER", CreatePlayerMenu(controller)));
