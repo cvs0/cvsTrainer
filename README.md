@@ -17,13 +17,13 @@ cvsTrainer is a Red Dead Redemption 2 native trainer developed by cvs0.
 - Object spawning
 - Many more features
 
-**Current Version:** 1.0.3
+**Current Version:** 1.0.5
 
 **Roadmap:**
 - Add more teleportation locations.
 - Include new weapon options.
 - Improve UI for better user experience.
-- Bug fixes and performance enhancements.
+- ~Bug fixes and performance enhancements.~
 - Add dragging for the trainer window
 - Add a config system
 - More features
