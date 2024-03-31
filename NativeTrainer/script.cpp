@@ -105,15 +105,20 @@ class MenuItemVehicleBoost : public MenuItemSwitchable
 			SetStatusText("PAGEUP / NUM9\nPAGEDOWN / NUM6");
 		SetState(newState);
 	}
+
 	virtual void OnFrame()
 	{
 		if (!GetState())
 			return;
+
 		Ped playerPed = PLAYER::PLAYER_PED_ID();
 		if (!PED::IS_PED_IN_ANY_VEHICLE(playerPed, 0))
 			return;
 
 		Vehicle veh = PED::GET_VEHICLE_PED_IS_USING(playerPed);
+		if (!ENTITY::DOES_ENTITY_EXIST(veh))
+			return;
+
 		DWORD model = ENTITY::GET_ENTITY_MODEL(veh);
 		BOOL bTrain = VEHICLE::IS_THIS_MODEL_A_TRAIN(model);
 
@@ -139,9 +144,12 @@ class MenuItemVehicleBoost : public MenuItemSwitchable
 			VEHICLE::SET_VEHICLE_FORWARD_SPEED(veh, speed);
 		}
 		else
+		{
 			if (ENTITY::IS_ENTITY_IN_AIR(veh, 0) || speed > 5.0)
 				VEHICLE::SET_VEHICLE_FORWARD_SPEED(veh, 0.0);
+		}
 	}
+
 public:
 	MenuItemVehicleBoost(string caption)
 		: MenuItemSwitchable(caption) {}
