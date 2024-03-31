@@ -219,7 +219,7 @@ int MenuBase::OnInput()
 	const int screenCount = itemCount / MenuBase_linesPerScreen + (itemsLeft ? 1 : 0);
 	const int lineCountLastScreen = itemsLeft ? itemsLeft : MenuBase_linesPerScreen;
 
-	auto buttons = MenuInput::GetButtonState();	
+	auto buttons = MenuInput::GetButtonState();
 
 	int waitTime = 0;
 
@@ -233,13 +233,13 @@ int MenuBase::OnInput()
 	{
 		int activeItemIndex = GetActiveItemIndex();
 		m_items[activeItemIndex]->OnSelect();
-	} else
-	if (buttons.b)
-	{ 
+	}
+	else if (buttons.b)
+	{
 		if (auto controller = GetController())
 			controller->PopMenu();
-	} else		
-	if (buttons.up)
+	}
+	else if (buttons.up)
 	{
 		if (m_activeLineIndex-- == 0)
 		{
@@ -247,14 +247,15 @@ int MenuBase::OnInput()
 			{
 				m_activeScreenIndex = screenCount - 1;
 				m_activeLineIndex = lineCountLastScreen - 1;
-			} else
+			}
+			else
 			{
 				m_activeScreenIndex--;
 				m_activeLineIndex = MenuBase_linesPerScreen - 1;
 			}
 		}
-	} else
-	if (buttons.down)
+	}
+	else if (buttons.down)
 	{
 		m_activeLineIndex++;
 		if (m_activeLineIndex == ((m_activeScreenIndex == (screenCount - 1)) ? lineCountLastScreen : MenuBase_linesPerScreen))
