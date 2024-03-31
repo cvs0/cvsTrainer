@@ -435,16 +435,24 @@ class MenuItemPlayerClearWanted : public MenuItemDefault
 	virtual void OnSelect()
 	{
 		Player player = PLAYER::PLAYER_ID();
-		if (m_headPrice)
-			PURSUIT::SET_PLAYER_PRICE_ON_A_HEAD(player, 0);
-		if (m_pursuit)
+		if (ENTITY::DOES_ENTITY_EXIST(player))
 		{
-			PURSUIT::CLEAR_CURRENT_PURSUIT();
-			PURSUIT::SET_PLAYER_WANTED_INTENSITY(player, 0);
+			if (m_headPrice)
+				PURSUIT::SET_PLAYER_PRICE_ON_A_HEAD(player, 0);
+			if (m_pursuit)
+			{
+				PURSUIT::CLEAR_CURRENT_PURSUIT();
+				PURSUIT::SET_PLAYER_WANTED_INTENSITY(player, 0);
+			}
+			SetStatusText("Player has to be in pursuit\n\n"
+				"head price: " + to_string(PURSUIT::GET_PLAYER_PRICE_ON_A_HEAD(player) / 100) + "\n" +
+				"wanted intensity: " + to_string(PURSUIT::GET_PLAYER_WANTED_INTENSITY(player) / 100));
 		}
-		SetStatusText("Player has to be in pursuit\n\n"
-			"head price: " + to_string(PURSUIT::GET_PLAYER_PRICE_ON_A_HEAD(player) / 100) + "\n" +
-			"wanted intensity: " + to_string(PURSUIT::GET_PLAYER_WANTED_INTENSITY(player) / 100));
+		else
+		{
+			// Player entity is invalid, handle the error accordingly
+			SetStatusText("Error: Player entity is invalid");
+		}
 	}
 public:
 	MenuItemPlayerClearWanted(string caption, bool headPrice, bool pursuit)

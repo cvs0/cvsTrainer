@@ -279,6 +279,6 @@ void MenuController::DrawStatusText()
 		UI::SET_TEXT_COLOR_RGBA(255, 255, 255, 255);
 		UI::SET_TEXT_CENTRE(1);
 		UI::SET_TEXT_DROPSHADOW(0, 0, 0, 0, 0);
-		DrawText(0.5, 0.5, const_cast<char *>(m_statusText.c_str()));
+		DrawText(0.5, 0.5, const_cast<char*>(m_statusText.c_str()));
 	}
 }
