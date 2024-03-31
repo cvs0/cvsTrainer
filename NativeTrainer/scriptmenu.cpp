@@ -5,6 +5,7 @@
 */
 
 #include "scriptmenu.h"
+#include <stdexcept>
 
 void DrawText(float x, float y, char *str)
 {
@@ -18,6 +19,12 @@ void DrawRect(float lineLeft, float lineTop, float lineWidth, float lineHeight, 
 
 void MenuItemBase::WaitAndDraw(int ms)
 {
+	if (ms <= 0)
+	{
+		// Invalid input, throw an exception or handle the error accordingly
+		throw std::invalid_argument("ms must be a positive value");
+	}
+
 	DWORD time = GetTickCount64() + ms;
 	bool waited = false;
 	while (GetTickCount64() < time || !waited)
@@ -29,22 +36,65 @@ void MenuItemBase::WaitAndDraw(int ms)
 	}
 }
 
-void MenuItemBase::SetStatusText(string text, int ms)
+void MenuItemBase::SetStatusText(const std::string& text, int ms /*= 2500*/)
 {
-	MenuController *controller;
+	if (text.empty())
+	{
+		// Invalid input, throw an exception or handle the error accordingly
+		throw std::invalid_argument("text cannot be empty");
+	}
+
+	if (ms <= 0)
+	{
+		// Invalid input, throw an exception or handle the error accordingly
+		throw std::invalid_argument("ms must be a positive value");
+	}
+
+	MenuController* controller;
 	if (m_menu && (controller = m_menu->GetController()))
+	{
 		controller->SetStatusText(text, ms);
+	}
 }
+
 
 void MenuItemBase::OnDraw(float lineTop, float lineLeft, bool active)
 {
+	if (m_lineHeight <= 0 || m_lineWidth <= 0)
+	{
+		// Invalid input, throw an exception or handle the error accordingly
+		throw std::invalid_argument("lineHeight and lineWidth must be positive values");
+	}
+
+	// Validate color parameters
+	if (m_colorText.r < 0 || m_colorText.r > 255 ||
+		m_colorText.g < 0 || m_colorText.g > 255 ||
+		m_colorText.b < 0 || m_colorText.b > 255 ||
+		m_colorText.a < 0 || m_colorText.a > 255 ||
+		m_colorTextActive.r < 0 || m_colorTextActive.r > 255 ||
+		m_colorTextActive.g < 0 || m_colorTextActive.g > 255 ||
+		m_colorTextActive.b < 0 || m_colorTextActive.b > 255 ||
+		m_colorTextActive.a < 0 || m_colorTextActive.a > 255 ||
+		m_colorRect.r < 0 || m_colorRect.r > 255 ||
+		m_colorRect.g < 0 || m_colorRect.g > 255 ||
+		m_colorRect.b < 0 || m_colorRect.b > 255 ||
+		m_colorRect.a < 0 || m_colorRect.a > 255 ||
+		m_colorRectActive.r < 0 || m_colorRectActive.r > 255 ||
+		m_colorRectActive.g < 0 || m_colorRectActive.g > 255 ||
+		m_colorRectActive.b < 0 || m_colorRectActive.b > 255 ||
+		m_colorRectActive.a < 0 || m_colorRectActive.a > 255)
+	{
+		// Invalid input, throw an exception or handle the error accordingly
+		throw std::invalid_argument("color values must be between 0 and 255");
+	}
+
 	// text
 	ColorRgba color = active ? m_colorTextActive : m_colorText;
 	UI::SET_TEXT_SCALE(0.0, m_lineHeight * 8.0f);
 	UI::SET_TEXT_COLOR_RGBA(color.r, color.g, color.b, color.a);
 	UI::SET_TEXT_CENTRE(0);
 	UI::SET_TEXT_DROPSHADOW(0, 0, 0, 0, 0);
-	DrawText(lineLeft + m_textLeft, lineTop + m_lineHeight / 4.5f, const_cast<char *>(GetCaption().c_str()));
+	DrawText(lineLeft + m_textLeft, lineTop + m_lineHeight / 4.5f, const_cast<char*>(GetCaption().c_str()));
 	// rect
 	color = active ? m_colorRectActive : m_colorRect;
 	DrawRect(lineLeft, lineTop, m_lineWidth, m_lineHeight, color.r, color.g, color.b, color.a);

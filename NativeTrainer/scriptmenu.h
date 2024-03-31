@@ -53,7 +53,7 @@ protected:
 			m_colorRect(colorRect), m_colorText(colorText), 
 			m_colorRectActive(colorRectActive), m_colorTextActive(colorTextActive)	{}
 	void WaitAndDraw(int ms);
-	void SetStatusText(string text, int ms = 2500);
+	void SetStatusText(const std::string& text, int ms = 2500);
 public:
 	virtual ~MenuItemBase() {}
 

@@ -17,6 +17,11 @@ using namespace std;
 
 #include "scriptinfo.h"
 
+void PlayAudio(const char* audioName, Entity entity, const char* audioRef, BOOL isNetwork, Any p4, Any p5)
+{
+	AUDIO::PLAY_SOUND_FROM_ENTITY(audioName, entity, audioRef, isNetwork, p4, p5);
+}
+
 class MenuItemPlayerFastHeal : public MenuItemSwitchable
 {
 	virtual void OnSelect()
@@ -1067,6 +1072,38 @@ public:
 		m_lastShootTime(0) {}
 };
 
+class MenuItemDeathNoise : public MenuItemSwitchable
+{
+	bool isPlayerDead = false;
+
+	virtual void OnSelect()
+	{
+		bool newstate = !GetState();
+		SetState(newstate);
+	}
+
+	virtual void OnFrame()
+	{
+		if (!GetState())
+			return;
+
+		Ped playerPed = PLAYER::PLAYER_PED_ID();
+
+		if (!isPlayerDead && ENTITY::IS_ENTITY_DEAD(playerPed))
+		{
+			PlayAudio("broke_alert.mp3", playerPed, "SOUND_REFERENCE", FALSE, 0, 0);
+			isPlayerDead = true;
+		}
+		else if (isPlayerDead && !ENTITY::IS_ENTITY_DEAD(playerPed))
+		{
+			isPlayerDead = false;
+		}
+	}
+public:
+	MenuItemDeathNoise(string caption)
+		: MenuItemSwitchable(caption) {}
+};
+
 MenuBase* CreatePlayerTeleportMenu(MenuController* controller)
 {
 	MenuBase* menu = new MenuBase(new MenuItemListTitle("TELEPORT"));
@@ -1524,13 +1561,14 @@ MenuBase* CreateMiscMenu(MenuController* controller)
 	menu->AddItem(new MenuItemMiscTransportGuns("HORSE CANNONS", true, false));
 	menu->AddItem(new MenuItemMiscTransportGuns("VEHICLE TURRETS", false, true));
 	menu->AddItem(new MenuItemMiscTransportGuns("VEHICLE CANNONS", false, false));
+	menu->AddItem(new MenuItemDeathNoise("DEATH NOISE"));
 
 	return menu;
 }
 
 MenuBase* CreateMainMenu(MenuController* controller)
 {
-	auto menu = new MenuBase(new MenuItemTitle("cvsTrainer 1.0.3"));
+	auto menu = new MenuBase(new MenuItemTitle("cvsTrainer 1.0.4"));
 	controller->RegisterMenu(menu);
 
 	menu->AddItem(new MenuItemMenu("PLAYER", CreatePlayerMenu(controller)));
