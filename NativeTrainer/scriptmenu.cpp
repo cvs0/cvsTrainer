@@ -158,9 +158,19 @@ void MenuItemMenu::OnDraw(float lineTop, float lineLeft, bool active)
 
 void MenuItemMenu::OnSelect()
 {
+	if (!m_menu)
+	{
+		// Invalid state, throw an exception or handle the error accordingly
+		throw std::logic_error("m_menu must not be null");
+	}
+
 	if (auto parentMenu = GetMenu())
+	{
 		if (auto controller = parentMenu->GetController())
+		{
 			controller->PushMenu(m_menu);
+		}
+	}
 }
 
 void MenuBase::OnDraw()
