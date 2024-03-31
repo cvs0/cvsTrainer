@@ -101,10 +101,25 @@ void MenuItemBase::OnDraw(float lineTop, float lineLeft, bool active)
 }
 
 void MenuItemSwitchable::OnDraw(float lineTop, float lineLeft, bool active)
-{	
-	MenuItemDefault::OnDraw(lineTop, lineLeft, active);
+{
+	// Validate lineTop and lineLeft parameters
+	if (lineTop < 0 || lineLeft < 0)
+	{
+		// Invalid input, throw an exception or handle the error accordingly
+		throw std::invalid_argument("lineTop and lineLeft must not be negative values");
+	}
+
+	// Validate lineWidth and lineHeight obtained from GetLineWidth() and GetLineHeight()
 	float lineWidth = GetLineWidth();
 	float lineHeight = GetLineHeight();
+	if (lineWidth <= 0 || lineHeight <= 0)
+	{
+		// Invalid input, throw an exception or handle the error accordingly
+		throw std::invalid_argument("lineWidth and lineHeight must be positive values");
+	}
+
+	// Proceed with the drawing logic
+	MenuItemDefault::OnDraw(lineTop, lineLeft, active);
 	ColorRgba color = active ? GetColorTextActive() : GetColorText();
 	UI::SET_TEXT_SCALE(0.0, lineHeight * 8.0f);
 	UI::SET_TEXT_COLOR_RGBA(color.r, color.g, color.b, static_cast<int>(color.a / 1.1f));
