@@ -175,19 +175,38 @@ void MenuItemMenu::OnSelect()
 
 void MenuBase::OnDraw()
 {
+	// Validate m_itemTitle pointer
+	if (!m_itemTitle)
+	{
+		// Invalid state, throw an exception or handle the error accordingly
+		throw std::logic_error("m_itemTitle must not be null");
+	}
+
 	float lineTop = MenuBase_menuTop;
 	float lineLeft = MenuBase_menuLeft;
+
+	// Update current item info if m_itemTitle is a MenuItemListTitle
 	if (m_itemTitle->GetClass() == eMenuItemClass::ListTitle)
-		reinterpret_cast<MenuItemListTitle *>(m_itemTitle)->
+	{
+		reinterpret_cast<MenuItemListTitle*>(m_itemTitle)->
 			SetCurrentItemInfo(GetActiveItemIndex() + 1, static_cast<int>(m_items.size()));
+	}
+
+	// Draw the menu title
 	m_itemTitle->OnDraw(lineTop, lineLeft, false);
 	lineTop += m_itemTitle->GetLineHeight();
+
+	// Draw menu items
 	for (int i = 0; i < MenuBase_linesPerScreen; i++)
 	{
 		int itemIndex = m_activeScreenIndex * MenuBase_linesPerScreen + i;
-		if (itemIndex == m_items.size())
+		if (itemIndex >= m_items.size() || itemIndex < 0)
+		{
+			// Index out of bounds, break the loop
 			break;
-		MenuItemBase *item = m_items[itemIndex];
+		}
+
+		MenuItemBase* item = m_items[itemIndex];
 		item->OnDraw(lineTop, lineLeft, m_activeLineIndex == i);
 		lineTop += item->GetLineHeight() - item->GetLineHeight() * MenuBase_lineOverlap;
 	}
