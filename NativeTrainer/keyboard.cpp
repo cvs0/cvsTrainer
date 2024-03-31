@@ -46,6 +46,13 @@ bool IsKeyDownLong(DWORD key)
     return (GetTickCount64() < keyStates[key].time + MAX_DOWN_LONG) && !keyStates[key].isUpNow;
 }
 
+void ResetKeyState(DWORD key)
+{
+    if (key >= 0 && key < KEYS_SIZE)
+        memset(&keyStates[key], 0, sizeof(KeyState));
+}
+
+
 bool IsKeyJustUp(DWORD key, bool exclusive)
 {
     if (key < 0 || key >= KEYS_SIZE)
@@ -56,10 +63,4 @@ bool IsKeyJustUp(DWORD key, bool exclusive)
         ResetKeyState(key);
 
     return isJustUp;
-}
-
-void ResetKeyState(DWORD key)
-{
-    if (key >= 0 && key < KEYS_SIZE)
-        memset(&keyStates[key], 0, sizeof(KeyState));
 }
