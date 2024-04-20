@@ -1,4 +1,4 @@
-![LOGO](Media/cvsTrainer.png) ![VERSION](Media/cvsTrainerVersionNum.png)
+![LOGO](Media/cvsTrainer.png)
 
 cvsTrainer is a Red Dead Redemption 2 native trainer developed by cvs0.
 
